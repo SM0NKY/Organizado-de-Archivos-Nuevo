@@ -29,10 +29,19 @@ class Clasify_F(Archivos):
 		self.carpetas:List[List[str]] = [self.clasificar_fecha(),self.clasificar_tipos()]
 
 	def clasificar_tipos(self) -> Optional[List[str]]:
-		""" It clasifies the files with the suffixes
+		""" It clasifies the existent suffixes
+		Parameters
+		----------
+		`None`
+		
 		Return
 		---------
 		`Optional[List[str]]`
+
+		Example
+		>>> objeto: Clasify_F|object = Clasify_F()
+		>>> print(objeto.clasificar_tipos())
+		{".pdf",".docx",...}
 		"""
 		tipos_archivo:set = set()
 		try:
@@ -47,7 +56,20 @@ class Clasify_F(Archivos):
 				raise e
 	
 	def clasificar_fecha(self) -> Optional[List[str]]:
-		
+		""" It clasifies the existent dates
+		Parameters
+		----------
+		`None`
+
+		Return 
+		`Optional[list[str]]`
+
+		Example
+		---------
+		>>> objeto:Clasify_F|object = Clasify_F()
+		>>> print(objeto.clasificar_fechas)
+		{("Noviembre","2024")...}
+		"""
 		dates:set = set()
 		try:
 			for x in self.docs.keys():

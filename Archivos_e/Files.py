@@ -1,6 +1,6 @@
 import os 
 import json
-from typing import Optional,Dict,Any,List
+from typing import Optional, Dict, Any, List
 from pathlib import Path
 
 #Path(__file__).parent
@@ -10,9 +10,11 @@ class Archivos():
 	Atributes
 	----------
 	`None`
+
+	Example
+	>>> objeto:object|Archivos = Archivos()
 	"""
 	def __init__(self) -> object:
-		#-- Aqui debo agregar el directorio --#
 		self.directorio:Optional[str] = None
 
 
@@ -31,7 +33,8 @@ class Archivos():
 		:None:
 
 		Example
-		>>> Archivos().documents()
+		>>> print(Archivos().documents())
+		{file&path : file}
 		"""
 		documentos:Dict[str,str] = {}
 		try:
