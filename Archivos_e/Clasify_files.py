@@ -74,7 +74,7 @@ class Clasify_F(Archivos):
 		try:
 			for x in self.docs.keys():
 				date:dt.datetime = dt.datetime.fromtimestamp(Path(x).stat().st_ctime)
-				dates.add((date.year,self.meses.get(date.month,None) ))
+				dates.add(self.meses.get(date.month,None) + date.year )
 			return list(dates)
 		except Exception as e:
 			if not self.docs:
@@ -82,18 +82,25 @@ class Clasify_F(Archivos):
 				raise e
 	
 	def clasificar_tipo_fecha(self) -> Optional[Dict[str,List[str]]]:
+		"""It makes an dictionary with the necesary specs to clasify a file 
+		Parameters
+		----------
+		`None`
+		Return
+		
+		"""
+
 		nueva_clasificacion:Dict[str,List] = {}
 		try:
 			for file_path in self.docs.keys():
 				file_date:dt.datetime = dt.datetime.fromtimestamp(Path(file_path).stat().st_ctime)
 				nueva_clasificacion[file_path] = [
-					self.docs[file_path][0],self.meses.get(file_date.month,None),file_date.year
+					self.docs[file_path][0],self.meses.get(file_date.month,None),file_date.year, Path(self.docs[file_path][0]).suffix
 					]
 			return nueva_clasificacion
 		except Exception as e:
-			if not self.docs:
-				print("Hubo un error al clasificar los archivos por fecha y tipo")
-				raise e
+			ic(e)
+			raise e
 
 if __name__ == "__main__":
 	clasificacion:object|Clasify_F = Clasify_F()
