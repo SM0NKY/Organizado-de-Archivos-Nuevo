@@ -73,14 +73,12 @@ class Organizar(Clasify_F,Contador_de_Archivos):
         {None} -> Files Moved 
         """
         try:
-            if output_dir:
+            if output_dir: 
                 self.show()
                 files_moved:int = len(self.final_document_list()) 
                 for input_dir, output_dir, number in zip(self.docs.keys(),self.final_document_list(),range(self.docs.keys())):
                     self.progress_bar(number,files_moved)
-                    sh.move(input_dir,output_dir)
-                self.ocultar()    
-        
+                    sh.move(input_dir,output_dir)    
         except Exception as e:
             ic(e)
             raise e
