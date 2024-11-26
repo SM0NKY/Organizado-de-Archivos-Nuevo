@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Optional
 import sys
 from tkinter import messagebox
 from icecream import ic
-
+from configuracion import Configuracion
 
 class Ventana(customtkinter.CTk):
     def __init__(self):
@@ -13,6 +13,8 @@ class Ventana(customtkinter.CTk):
         self.geometry("400x800")
         self.title = "Interfaz"
         self.protocol("WM_DELETE_WINDOW")
+        self.config_button:object|customtkinter.CTkButton = customtkinter.CTkButton(self,)
+        self.frame = customtkinter.CTkFrame(self,)
 
     def main(self) -> None:
         """This function starts the mainloop, and initializes the correspondent labels, buttons, etc.
@@ -45,7 +47,12 @@ class Ventana(customtkinter.CTk):
 
 
     def initialize_structure(self) -> None:
-        """ This function initializes the buttons and labels
+        """ This method initializes the buttons and labels
+        
+        Parameters
+        ----------
+        `None`
+        
         """
 
         
