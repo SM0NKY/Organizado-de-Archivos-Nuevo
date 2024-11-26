@@ -1,9 +1,11 @@
-import os
+import os,sys
 from typing import List, Any, Dict, Optional
-from Archivos_e import Clasify_F
+
 from icecream import ic as ice
 from pathlib import Path
 import json
+sys.path.append(os.path.normpath(Path(__file__).parent.parent))
+from Archivos_e import Clasify_F
 
 class Create_Folders():
     """ This class creates the correspondent folders needed for the files
@@ -17,9 +19,9 @@ class Create_Folders():
     {objeto} 
     """
 
-    
-    carpetas:List[str] = Clasify_F.clasificar_tipos()
-    subcarpetas:List[str] = Clasify_F.clasificar_fecha()
+    names:object|Clasify_F = Clasify_F()
+    carpetas:List[str] = names.clasificar_tipos()
+    subcarpetas:List[str] = names.clasificar_fecha()
     
     def __init__(self):
         self.output:str = None
@@ -29,7 +31,7 @@ class Create_Folders():
                 dir:dict = json.load(directorio_s)
                 self.output:str = dir.get("o_directory")
 
-    def folders(self)-> None:
+    def folders(self,Seleccion)-> None:
         """This method creates the correspondent folders and subfolders
         Parameters
         ----------
@@ -42,11 +44,12 @@ class Create_Folders():
 
         try:
             for carpeta in self.carpetas:
-                if not os.path.exists(os.path.join(self.output, carpeta)):
-                    os.mkdir(os.path.join(self.output, carpeta))
-                    for subcarpeta in self.subcarpetas:
-                        if not os.path.exists(os.path.join(self.output,carpeta,subcarpeta)):
-                            os.mkdir(os.path.join(self.output,carpeta,subcarpeta))
+                if carpeta in Seleccion: 
+                    if not os.path.exists(os.path.join(self.output, carpeta)):
+                        os.mkdir(os.path.join(self.output, carpeta))
+                        for subcarpeta in self.subcarpetas:
+                            if not os.path.exists(os.path.join(self.output,carpeta,subcarpeta)):
+                                os.mkdir(os.path.join(self.output,carpeta,subcarpeta))
         except Exception as e:
             ice(e)
             if self.carpetas and self.subcarpetas:
