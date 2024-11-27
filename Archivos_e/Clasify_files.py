@@ -1,9 +1,13 @@
-import os
-from .Files import Archivos
+import os, sys
 from typing import Dict, Any, List, Optional
 from pathlib import Path
 import datetime as dt
 from icecream import ic
+
+sys.path.append(os.path.abspath(Path(__file__).parent.parent))
+from Archivos_e.files import Archivos
+
+
 
 class Clasify_F(Archivos):
 	""" This class allows to create just the correspondent folder and subfolder names  
@@ -73,8 +77,8 @@ class Clasify_F(Archivos):
 		dates:set = set()
 		try:
 			for x in self.docs.keys():
-				date:dt.datetime = dt.datetime.fromtimestamp(Path(x).stat().st_ctime)
-				dates.add(self.meses.get(date.month,None) + date.year )
+				date:dt.datetime = dt.datetime.fromtimestamp(Path(x).stat().st_birthtime)
+				dates.add(self.meses.get(date.month,None) + " " + str(date.year))
 			return list(dates)
 		except Exception as e:
 			if not self.docs:
@@ -93,7 +97,7 @@ class Clasify_F(Archivos):
 		nueva_clasificacion:Dict[str,List] = {}
 		try:
 			for file_path in self.docs.keys():
-				file_date:dt.datetime = dt.datetime.fromtimestamp(Path(file_path).stat().st_ctime)
+				file_date:dt.datetime = dt.datetime.fromtimestamp(Path(file_path).stat().st_birthtime)
 				nueva_clasificacion[file_path] = [
 					self.docs[file_path][0],self.meses.get(file_date.month,None),file_date.year, Path(self.docs[file_path][0]).suffix
 					]
@@ -104,7 +108,7 @@ class Clasify_F(Archivos):
 
 if __name__ == "__main__":
 	clasificacion:object|Clasify_F = Clasify_F()
-	print(clasificacion.clasificar_tipo_fecha())
+	print(clasificacion.clasificar_fecha())
 
 
 

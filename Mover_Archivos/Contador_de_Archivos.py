@@ -19,7 +19,6 @@ class Contador_de_Archivos(customtkinter.CTk):
         self.title = "Contador"
         self.geometry("300x200")
         self.protocol("WM_DELETE_WINDOW",lambda: None)
-        self.withdraw()
         self.label_counter:object|customtkinter.CTkLabel = customtkinter.CTkLabel(master= self,text = "", font= ("Comic Sans MS",20))
         self.barra_de_progreso:object|customtkinter.CTkProgressBar = customtkinter.CTkProgressBar(self, width= 400, progress_color= "Green")
 
@@ -36,6 +35,9 @@ class Contador_de_Archivos(customtkinter.CTk):
         self.deiconify()
         self.label_counter.pack(padx = 20, pady = 20)
         self.barra_de_progreso.pack(padx = 20, pady = 20)
+    
+    def ocultar(self) -> None:
+        self.withdraw()
 
     def progress_bar(self,number:int,total:int) -> None:
         """This function changes the progress in the progress bar, it automatically displays the progressbar and closes for it self
@@ -52,7 +54,6 @@ class Contador_de_Archivos(customtkinter.CTk):
             self.barra_de_progreso.update_idletasks()
             self.barra_de_progreso.set(number/total)
             self.label_counter.configure(text = f"Archivo {number} de {total}")
-            self.show()
             time.sleep(0.5)
         except Exception as e:
             ic(e)

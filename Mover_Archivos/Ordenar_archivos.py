@@ -7,7 +7,7 @@ from Archivos_e import Clasify_F
 from icecream import ic
 from Contador_de_Archivos import Contador_de_Archivos
 
-class Organizar(Clasify_F,Contador_de_Archivos):
+class Organizar(Clasify_F):
     """ This class allows to calculate the final document list and to move the files
     Atributes
     ----------
@@ -17,6 +17,7 @@ class Organizar(Clasify_F,Contador_de_Archivos):
     >>> objeto:object|Organizar = Organizar()
     {objeto}
     """
+    counter = Contador_de_Archivos()
     def __init__(self) -> object:
         super().__init__()
         self.outputdir:str = None
@@ -29,7 +30,7 @@ class Organizar(Clasify_F,Contador_de_Archivos):
             except FileNotFoundError as e:
                 raise(e)
     
-    def final_document_list(self,seleccion:List[str]) -> Optional[List[str]]:
+    def final_document_list(self,seleccion:Optional[List[str]]) -> Optional[List[str]]:
         """ This function returns the final documents path within the selection
         Parameters
         ----------
@@ -48,15 +49,15 @@ class Organizar(Clasify_F,Contador_de_Archivos):
         try:
             for data in self.docs.values():
                 final_dir.append(os.path.join(
-                    data[3] if data[3] in self.clasificar_tipos() and data[3] in seleccion else None,
-                    data[1] + data[2] if data[1] + data[2] in self.clasificar_tipo_fecha() else None,
+                    data[3] if data[3] in self.clasificar_tipos() and data[3] in seleccion else "",
+                    data[1] + data[2] if data[1] + data[2] in self.clasificar_tipo_fecha() else "",
                     data[0]
                 ))
         except Exception as e:
             ic(e)
             raise e
 
-    def move_files(self) -> None:
+    def move_files(self,seleccion:Optional[List[str]]) -> None:
         """ This function moves the files from the origin "directory_e.json" folder to the "directorio_s.json" and displays the progress using an inheritance of the progressbar
         Parameters
         ----------
@@ -73,18 +74,24 @@ class Organizar(Clasify_F,Contador_de_Archivos):
         {None} -> Files Moved 
         """
         try:
-            if output_dir: 
-                self.show()
-                files_moved:int = len(self.final_document_list()) 
-                for input_dir, output_dir, number in zip(self.docs.keys(),self.final_document_list(),range(self.docs.keys())):
-                    self.progress_bar(number,files_moved)
-                    sh.move(input_dir,output_dir)    
+            if self.outputdir: 
+                
+                #self.counter.show()
+                files_moved:int = len(self.final_document_list(seleccion)) 
+                ic(self.final_document_list(seleccion))
+                
+                #for input_dir, output_dir, number in self.docs.keys():
+                #    if self.docs[input_dir] self.final_document_list(seleccion),range(self.docs.keys())):
+                #    for 
+                #    self.progress_bar(number,files_moved)
+                #    sh.move(input_dir,output_dir) 
+                #self.counter.ocultar()   
         except Exception as e:
-            ic(e)
             raise e
     
 
-
+if __name__ == "__main__":
+    pass
 
         #for x in zip(self.archivos.values()[1],self.archivos.values()[2]): 
 

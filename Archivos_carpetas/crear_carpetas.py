@@ -1,9 +1,9 @@
 import os,sys
 from typing import List, Any, Dict, Optional
-
 from icecream import ic as ice
 from pathlib import Path
 import json
+
 sys.path.append(os.path.normpath(Path(__file__).parent.parent))
 from Archivos_e import Clasify_F
 
@@ -31,7 +31,7 @@ class Create_Folders():
                 dir:dict = json.load(directorio_s)
                 self.output:str = dir.get("o_directory")
 
-    def folders(self,Seleccion)-> None:
+    def folders(self,Seleccion:Optional[List[str]] = None)-> None:
         """This method creates the correspondent folders and subfolders
         Parameters
         ----------
@@ -44,12 +44,16 @@ class Create_Folders():
 
         try:
             for carpeta in self.carpetas:
+                ice(carpeta)
                 if carpeta in Seleccion: 
                     if not os.path.exists(os.path.join(self.output, carpeta)):
-                        os.mkdir(os.path.join(self.output, carpeta))
+                        ice(os.path.exists(os.path.join(self.output, carpeta)))
+                        os.makedirs(os.path.join(self.output, carpeta))
+                        ice(self.subcarpetas)
                         for subcarpeta in self.subcarpetas:
                             if not os.path.exists(os.path.join(self.output,carpeta,subcarpeta)):
-                                os.mkdir(os.path.join(self.output,carpeta,subcarpeta))
+                                ice(os.path.join(self.output,carpeta,subcarpeta))
+                                os.makedirs(os.path.join(self.output,carpeta,subcarpeta))
         except Exception as e:
             ice(e)
             if self.carpetas and self.subcarpetas:

@@ -4,7 +4,7 @@ from typing import List, Dict, Any, Optional
 from pathlib import Path
 import os
 import json
-
+from tkinter import PhotoImage
 
 class Configuracion(customtkinter.CTk):
     """ This class shows the configuration settings of the file
@@ -31,7 +31,7 @@ class Configuracion(customtkinter.CTk):
         
         with open(directory_ejson,'r') as input:
             dir_entrada:dict|json.load = json.load(input)
-            self.label2:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text= dir_entrada.get("directory"), font= ("Comic Sans MS",20)) 
+            self.label2:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text= dir_entrada.get("directory"), font= ("Comic Sans MS",15)) 
 
         self.label3:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text="Seleccione el directorio de salida")
         self.button_e:object|customtkinter.CTkButton = customtkinter.CTkButton(self,text= "Seleccionar directorio", font=("Sans Seriff",15), command= self.configurar_e)
@@ -39,7 +39,7 @@ class Configuracion(customtkinter.CTk):
         
         with open(directory_sjson,'r')as output:
             dir_salida:dict|json.load = json.load(output)
-            self.label4:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text=dir_salida.get("o_directory"), font= ("Comic Sans MS", 20))
+            self.label4:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text=dir_salida.get("o_directory"), font= ("Comic Sans MS", 15))
         
         self.button_s:object|customtkinter.CTkButton = customtkinter.CTkButton(self, text= "Seleccionar directorio", font= ("SansSeriff",15 ),command= self.configurar_s)
 
@@ -62,6 +62,7 @@ class Configuracion(customtkinter.CTk):
         >>> objeto.mostrar()
         {None} -> It displays the window in the screen  
         """
+        self.iconphoto(True, PhotoImage(file= os.path.join(Path(__file__).parent,"config.png")))
         self.label1.pack(padx = 20, pady = 20)
         self.label2.pack(padx = 20, pady = 20)
         self.label3.pack(padx = 20, pady = 20)
@@ -69,6 +70,7 @@ class Configuracion(customtkinter.CTk):
         self.label4.pack(padx = 20, pady = 20)
         self.button_s.pack(padx = 20, pady = 20)
         self.boton_c.pack(padx = 20, pady = 20)
+        
 
         self.deiconify()
 

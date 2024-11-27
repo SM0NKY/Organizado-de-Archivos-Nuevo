@@ -29,18 +29,15 @@ class Tipos(customtkinter.CTk):
     def __init__(self,clasificaciones:Optional[List[str]] = None) -> None:
         super().__init__()
         
-        self.geometry("300x600")
+        self.geometry("350x600")
         self.title("Tipos de Archivo")
-        self.label1:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text="Selecciona los formatos que quieras organizar", font= ("Comic Sans MS", 10))
-        self.tipos:Optional[List[Any]] = self.lista_clasificado  if self.lista_clasificado else clasificaciones
+        self.label1:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text="Selecciona los formatos que quieras organizar", font= ("Comic Sans MS", 15))
+        self.tipos:Optional[List[Any]] = [elemento for elemento in self.clasific.clasificar_tipos() if elemento.strip()] if self.lista_clasificado else clasificaciones
         self.check_boxes:Optional[List[object]]|Optional[List[customtkinter.CTkCheckBox]] = []
         self.values:Optional[Dict[str,object]]|Optional[Dict[str,customtkinter.BooleanVar]] = {}
-
-        for tipo in self.tipos:
-            self.values[tipo] = customtkinter.BooleanVar()
         
-        for tipo in self.tipos:
-            self.check_boxes.append(customtkinter.CTkCheckBox(self, text= tipo, variable= self.values[tipo]))
+        self.label1.pack(padx = 20, pady= 20)
+        self.load_combo_boxes()
 
         self.button_c:object|customtkinter.CTkButton = customtkinter.CTkButton(self, text= "Confirmar", font=("Comic Sans",15),command=self.close )
 
@@ -61,12 +58,8 @@ class Tipos(customtkinter.CTk):
         >>> objeto.mostrar()
         {None} -> Displays the window on the screen
         """
-
-        self.label1.pack(padx = 20, pady= 20)
-        self.load_combo_boxes()
-        self.button_c.pack()
-
-        #self.mainloop()
+        self.update_combo_boxes()
+        self.button_c.pack() 
         self.deiconify()
 
     def close(self):
@@ -81,7 +74,9 @@ class Tipos(customtkinter.CTk):
 
         Example
         ----------
-        >>>
+        >>> objeto: object|Tipos = Tipos()
+        >>> objecto.close()
+        {None} -> Withdraws the window from the screen and saves the config files
         """
         
         try:
@@ -95,6 +90,21 @@ class Tipos(customtkinter.CTk):
             raise error
 
     def listado_de_seleccion(self) -> Optional[List[str]]:
+        """ This method verifies which is the selected data within the filetypes
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `Optional[List[str]]` 
+
+        Example
+        ----------
+        >>> objeto:object|Tipos = Tipos()
+        >>> objeto.listado_de_seleccion()
+        {Optional[List[str]]}
+        """
         try:
             return [tipo for tipo in self.values.keys() if self.values[tipo].get()]
         except Exception as error:
@@ -102,8 +112,42 @@ class Tipos(customtkinter.CTk):
             raise error
         
     def load_combo_boxes(self) -> None:
-        for index in range(len(self.check_boxes)):
-            self.check_boxes[index].pack(padx = 10, pady = 2,side = "top", anchor = "w")
+        """This method loads the correspondent filetypes in the window
+        
+        Parameters
+        ----------
+        `None`
+
+        Return 
+        ----------
+        `None`
+
+        Example
+        ----------
+        >>> objeto:object|Tipos = Tipos()
+        >>> objeto.load_combo_boxes()
+        {None} -> Loads the combo boxes in the window
+
+        """
+
+        for box in self.check_boxes:
+            box.destroy()
+
+        self.check_boxes:Optional[List[object]]|Optional[List[customtkinter.CTkCheckBox]] = []
+        self.values.clear()
+
+        for tipo,index in zip(self.tipos,range(len(self.tipos))):
+                self.values[tipo] = customtkinter.BooleanVar()
+                self.check_boxes.append(customtkinter.CTkCheckBox(self, text= tipo, variable= self.values[tipo]))
+                self.check_boxes[index].pack(padx = 10, pady = 2,side = "top", anchor = "w")
+            
+
+    def update_combo_boxes(self) -> None:
+        nuevos_tipos = Clasify_F().clasificar_tipos()
+        if nuevos_tipos != self.tipos:
+            
+            self.tipos = [elemento for elemento in nuevos_tipos if elemento.strip()]
+            self.load_combo_boxes()
 
 if __name__ == "__main__":
     tipos:object|Tipos = Tipos()
