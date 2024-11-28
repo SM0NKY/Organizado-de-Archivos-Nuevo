@@ -29,6 +29,8 @@ class Tipos(customtkinter.CTk):
     def __init__(self,clasificaciones:Optional[List[str]] = None) -> None:
         super().__init__()
         
+        self.ventana_abierta:bool = False
+
         self.geometry("350x600")
         self.title("Tipos de Archivo")
         self.label1:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text="Selecciona los formatos que quieras organizar", font= ("Comic Sans MS", 15))
@@ -61,6 +63,7 @@ class Tipos(customtkinter.CTk):
         self.update_combo_boxes()
         self.button_c.pack() 
         self.deiconify()
+        self.ventana_abierta = True
 
     def close(self):
         """ It withdraws the window from the screen 
@@ -83,6 +86,7 @@ class Tipos(customtkinter.CTk):
             with open(os.path.join(Path(__file__).parent,"filetypes.json"),'w') as file:
                 json.dump({"types":self.listado_de_seleccion()},file)
 
+            self.ventana_abierta = False
             self.withdraw()
         
         except Exception as error:

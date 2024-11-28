@@ -27,7 +27,7 @@ class Configuracion(customtkinter.CTk):
         self.geometry("400x700")
         self.title("Configuración")
         self.label1:object|customtkinter.CTkLabel = customtkinter.CTkLabel(self,text="Seleccione el directorio de entrada")
-        
+        self.ventana_abierta:bool = False
         
         with open(directory_ejson,'r') as input:
             dir_entrada:dict|json.load = json.load(input)
@@ -43,7 +43,7 @@ class Configuracion(customtkinter.CTk):
         
         self.button_s:object|customtkinter.CTkButton = customtkinter.CTkButton(self, text= "Seleccionar directorio", font= ("SansSeriff",15 ),command= self.configurar_s)
 
-        self.boton_c:object|customtkinter.CTkButton = customtkinter.CTkButton(self,text= "Confirmar",font= ("Sans Seriff",15),command= self.withdraw)
+        self.boton_c:object|customtkinter.CTkButton = customtkinter.CTkButton(self,text= "Confirmar",font= ("Sans Seriff",15),command= self.ocultar)
     
     def mostrar(self) -> None:
         """ This methods allows to display the window in the screen 
@@ -62,7 +62,7 @@ class Configuracion(customtkinter.CTk):
         >>> objeto.mostrar()
         {None} -> It displays the window in the screen  
         """
-        self.iconphoto(True, PhotoImage(file= os.path.join(Path(__file__).parent,"config.png")))
+        #self.iconphoto(True, PhotoImage(file= os.path.join(Path(__file__).parent,"config.png")))
         self.label1.pack(padx = 20, pady = 20)
         self.label2.pack(padx = 20, pady = 20)
         self.label3.pack(padx = 20, pady = 20)
@@ -71,7 +71,7 @@ class Configuracion(customtkinter.CTk):
         self.button_s.pack(padx = 20, pady = 20)
         self.boton_c.pack(padx = 20, pady = 20)
         
-
+        self.ventana_abierta = True
         self.deiconify()
 
     def ocultar(self) -> None:
@@ -93,9 +93,9 @@ class Configuracion(customtkinter.CTk):
         >>> config.ocultar()
         {None} -> Withdraws the window from the screen
         """
-
-        self.destroy()
-
+        self.ventana_abierta = False
+        self.withdraw()
+        
     
     def configurar_e(self) -> Optional[str]:
         """This method helps to change the dir_i.json

@@ -17,7 +17,17 @@ sys.path.append(os.path.abspath(os.path.join(Path(__file__).parent.parent,"Mover
 from Mover_Archivos import Organizar
 
 class Ventana(customtkinter.CTk):
-    """
+    """This class displays the principal window of the program
+    
+    Atributes
+    ----------
+    `None`
+
+    Example
+    ----------
+    >>> window:object|Ventana = Ventana()
+    >>> window
+    {Object} 
     """
     
     configuracion:object|Configuracion = Configuracion()
@@ -28,6 +38,7 @@ class Ventana(customtkinter.CTk):
     var:str|object|customtkinter.StringVar = customtkinter.StringVar(value=opciones[0])
     def __init__(self):
         super().__init__()
+        self.ventana_secundaria:bool = False
         self.geometry("500x600")
         self.title("Interfaz")
         self.protocol("WM_DELETE_WINDOW",self.close)
@@ -50,7 +61,14 @@ class Ventana(customtkinter.CTk):
         
         Return
         ----------
-        `None` 
+        `None`
+
+        Example
+        ----------
+        >>> window
+        >>> window:object|Ventana = Ventana()
+        >>> window.main()
+        {None} -> Displays the main window in the screen 
         """
         #Aqui adjuntar lo que se ocupa mostrar en pantalla#
         self.initialize_structure()
@@ -94,11 +112,22 @@ class Ventana(customtkinter.CTk):
         
     
     def open_config(self) -> None:
-        self.configuracion.mostrar()
+        #Aqui adjuntar una funcion que permite abrir solamente una ventana secundaria a la vez#
+        try:
+            if not (self.configuracion.ventana_abierta or self.seleccion.ventana_abierta):
+                self.configuracion.mostrar()
+        except Exception as error:
+            ic(error)
 
     def open_types(self) -> None:
-        self.seleccion.mostrar()
-    
+        try:
+
+            if not (self.configuracion.ventana_abierta or self.seleccion.ventana_abierta):
+                self.seleccion.mostrar()
+        except Exception as error:
+            ic(error)
+
+
     def confirm_command(self):
         try:
             
@@ -115,7 +144,8 @@ class Ventana(customtkinter.CTk):
                 self.create_folders()
                 self.move_files()
         except Exception as e:
-            ic(e)  
+            ic(e)
+            messagebox.askokcancel("Error","Por favor resvisa la informacion ingresada")  
     
     def get_types(self) -> Optional[List[str]]:
         try:
