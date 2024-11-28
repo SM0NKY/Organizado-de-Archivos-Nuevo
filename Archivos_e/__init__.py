@@ -1,2 +1,2 @@
 from .Clasify_files import Clasify_F
-from .Files import Archivos
+from .files import Archivos

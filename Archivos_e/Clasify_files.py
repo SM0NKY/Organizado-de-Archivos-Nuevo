@@ -5,11 +5,11 @@ import datetime as dt
 from icecream import ic
 
 sys.path.append(os.path.abspath(Path(__file__).parent.parent))
-from Archivos_e import Files
+from Archivos_e import files
+	
 
 
-
-class Clasify_F(Files.Archivos):
+class Clasify_F(files.Archivos):
 	""" This class allows to create just the correspondent folder and subfolder names  
 	"""
 	meses: dict = {

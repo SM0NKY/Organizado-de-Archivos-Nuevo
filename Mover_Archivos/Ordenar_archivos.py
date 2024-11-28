@@ -2,7 +2,10 @@ import shutil as sh
 from typing import List, Dict, Any, Optional
 import os
 from pathlib import Path
-import json
+import json,sys
+import threading as th
+
+sys.path.append(os.path.abspath(Path(__file__).parent.parent))
 from Archivos_e import Clasify_F
 from icecream import ic
 from Contador_de_Archivos import Contador_de_Archivos
@@ -18,6 +21,8 @@ class Organizar(Clasify_F):
     {objeto}
     """
     counter = Contador_de_Archivos()
+    
+
     def __init__(self) -> object:
         super().__init__()
         self.outputdir:str = None
@@ -45,14 +50,12 @@ class Organizar(Clasify_F):
         >>> print(objeto.final_document_list(seleccion))
         {[archivos in seleccion]} 
         """
-        final_dir:List[str] = []
+        final_dir:Optional[List[List[str]]] = []
         try:
-            for data in self.docs.values():
-                final_dir.append(os.path.join(
-                    data[3] if data[3] in self.clasificar_tipos() and data[3] in seleccion else "",
-                    data[1] + data[2] if data[1] + data[2] in self.clasificar_tipo_fecha() else "",
-                    data[0]
-                ))
+            for dir,data in self.archivos.items():
+                if data[3] in seleccion:
+                    final_dir.append([dir,os.path.join(self.outputdir, data[3], data[1] + f"{data[2]}" , data[0])])
+            return final_dir
         except Exception as e:
             ic(e)
             raise e
@@ -76,16 +79,15 @@ class Organizar(Clasify_F):
         try:
             if self.outputdir: 
                 
-                #self.counter.show()
-                files_moved:int = len(self.final_document_list(seleccion)) 
+                self.counter.show()
+                files_moved:int = self.final_document_list(seleccion) 
                 ic(self.final_document_list(seleccion))
+                for index in range(len(files_moved)):
+                    self.counter.progress_bar(index + 1,len(files_moved))
+                    ic(os.path.normpath(files_moved[index][0]))
+                    #sh.move(files_moved[index][0],files_moved[index][1]) 
                 
-                #for input_dir, output_dir, number in self.docs.keys():
-                #    if self.docs[input_dir] self.final_document_list(seleccion),range(self.docs.keys())):
-                #    for 
-                #    self.progress_bar(number,files_moved)
-                #    sh.move(input_dir,output_dir) 
-                #self.counter.ocultar()   
+                self.counter.ocultar()   
         except Exception as e:
             raise e
     

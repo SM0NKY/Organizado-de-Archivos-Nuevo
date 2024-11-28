@@ -9,6 +9,7 @@ from seleccion import Tipos
 import json
 import os
 from pathlib import Path
+import threading as th
 
 sys.path.append(os.path.abspath(os.path.join(Path(__file__).parent.parent,"Archivos_carpetas")))
 from Archivos_carpetas import Create_Folders
@@ -161,7 +162,8 @@ class Ventana(customtkinter.CTk):
 
     def move_files(self) -> None:
         organize:object|Organizar =  Organizar()
-        organize.move_files(self.seleccion.listado_de_seleccion())
+        organizar_task:th.Thread = th.Thread(target= organize.move_files, args= [self.seleccion.listado_de_seleccion()])
+        organizar_task.start()
 
 
 if __name__ == "__main__":

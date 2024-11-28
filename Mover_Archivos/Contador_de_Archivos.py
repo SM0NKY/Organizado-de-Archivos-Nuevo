@@ -32,10 +32,10 @@ class Contador_de_Archivos(customtkinter.CTk):
         ----------
         `None`
         """
-        self.deiconify()
+        
         self.label_counter.pack(padx = 20, pady = 20)
         self.barra_de_progreso.pack(padx = 20, pady = 20)
-    
+
     def ocultar(self) -> None:
         self.withdraw()
 
