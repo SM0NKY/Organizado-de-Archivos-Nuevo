@@ -4,6 +4,7 @@ from icecream import ic
 import json
 from pathlib import Path
 import os
+from tkinter import messagebox
 
 sys.path.append(os.path.normpath(Path(__file__).parent.parent))
 from Archivos_e import Clasify_F
@@ -81,7 +82,6 @@ class Tipos(customtkinter.CTk):
         >>> objecto.close()
         {None} -> Withdraws the window from the screen and saves the config files
         """
-        
         try:
             with open(os.path.join(Path(__file__).parent,"filetypes.json"),'w') as file:
                 json.dump({"types":self.listado_de_seleccion()},file)
@@ -131,20 +131,22 @@ class Tipos(customtkinter.CTk):
         >>> objeto:object|Tipos = Tipos()
         >>> objeto.load_combo_boxes()
         {None} -> Loads the combo boxes in the window
-
         """
+        try:
+            for box in self.check_boxes:
+                box.destroy()
 
-        for box in self.check_boxes:
-            box.destroy()
+            self.check_boxes:Optional[List[object]]|Optional[List[customtkinter.CTkCheckBox]] = []
+            self.values.clear()
 
-        self.check_boxes:Optional[List[object]]|Optional[List[customtkinter.CTkCheckBox]] = []
-        self.values.clear()
-
-        for tipo,index in zip(self.tipos,range(len(self.tipos))):
-                self.values[tipo] = customtkinter.BooleanVar()
-                self.check_boxes.append(customtkinter.CTkCheckBox(self, text= tipo, variable= self.values[tipo]))
-                self.check_boxes[index].pack(padx = 10, pady = 2,side = "top", anchor = "w")
-            
+            if self.tipos:
+                for tipo,index in zip(self.tipos,range(len(self.tipos))):
+                        self.values[tipo] = customtkinter.BooleanVar()
+                        self.check_boxes.append(customtkinter.CTkCheckBox(self, text= tipo, variable= self.values[tipo]))
+                        self.check_boxes[index].pack(padx = 10, pady = 2,side = "top", anchor = "w")
+        except Exception as e:
+            messagebox.askokcancel("Error","Hubo un error al cargar loas tipos")
+            raise e        
 
     def update_combo_boxes(self) -> None:
         nuevos_tipos = Clasify_F().clasificar_tipos()

@@ -40,6 +40,12 @@ class Create_Folders():
         Return
         ---------
         `None`
+
+        Example
+        ----------
+        >>> c_folders:object|Create_Folders = Create_Folders()
+        >>> c_folders.folders(Seleccion = seleccion) -> Here the selection is in a list
+        {None} -> Creates the correspondent files depending of the selection
         """
 
         try:

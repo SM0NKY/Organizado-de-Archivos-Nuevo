@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Optional
 import os
 from pathlib import Path
 import json,sys
-import threading as th
+from tkinter import messagebox
 
 sys.path.append(os.path.abspath(Path(__file__).parent.parent))
 from Archivos_e import Clasify_F
@@ -54,7 +54,8 @@ class Organizar(Clasify_F):
         try:
             for dir,data in self.archivos.items():
                 if data[3] in seleccion:
-                    final_dir.append([dir,os.path.join(self.outputdir, data[3], data[1] + f"{data[2]}" , data[0])])
+                    month:str = data[1] + " " + f"{data[2]}"
+                    final_dir.append([dir,str(os.path.join(self.outputdir, data[3], month , data[0]))])
             return final_dir
         except Exception as e:
             ic(e)
@@ -77,23 +78,34 @@ class Organizar(Clasify_F):
         {None} -> Files Moved 
         """
         try:
-            if self.outputdir: 
+            if os.path.exists(self.outputdir): 
                 
                 self.counter.show()
                 files_moved:int = self.final_document_list(seleccion) 
                 ic(self.final_document_list(seleccion))
-                for index in range(len(files_moved)):
-                    self.counter.progress_bar(index + 1,len(files_moved))
-                    ic(os.path.normpath(files_moved[index][0]))
-                    #sh.move(files_moved[index][0],files_moved[index][1]) 
-                
-                self.counter.ocultar()   
-        except Exception as e:
-            raise e
+                for index,file_data in enumerate(files_moved):
+                    ic(Path(files_moved[index][1]).parent)
+                    os.makedirs(Path(files_moved[index][1]).parent, exist_ok= True)
+                    
+                    print(Path(files_moved[index][1]).parent)
+                    if os.path.exists(Path(files_moved[index][1]).parent):
+                        number:int = index + 1
+                        self.counter.progress_bar(number,len(files_moved))
+                        print("\n")
+                        ic(os.path.normpath(files_moved[index][0]))
+                        ic(os.path.normpath(files_moved[index][1]))
+                        sh.move(files_moved[index][0],files_moved[index][1]) 
+
+                self.counter.ocultar()
+                messagebox.askokcancel("Archivos ordenados","Los archivos se han ordenado correctamente")
+
+        except NotADirectoryError as e:
+            ic(e)
+            self.counter.ocultar()
+            raise 
     
 
 if __name__ == "__main__":
-    pass
-
-        #for x in zip(self.archivos.values()[1],self.archivos.values()[2]): 
+    print(os.path.join("path", "to", "file"))
+    #for x in zip(self.archivos.values()[1],self.archivos.values()[2]): 
 

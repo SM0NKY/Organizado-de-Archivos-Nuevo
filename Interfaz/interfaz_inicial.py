@@ -9,7 +9,7 @@ from seleccion import Tipos
 import json
 import os
 from pathlib import Path
-import threading as th
+import time
 
 sys.path.append(os.path.abspath(os.path.join(Path(__file__).parent.parent,"Archivos_carpetas")))
 from Archivos_carpetas import Create_Folders
@@ -84,6 +84,12 @@ class Ventana(customtkinter.CTk):
         Return
         ----------
         `None`
+
+        Example
+        >>> ventana:object|Ventana()
+        >>> ventana.open() -> Opens the window
+        >>> ventana.close() -> Closes the window
+        {None} -> Closes the window
         """
         try:
             if messagebox.askyesnocancel("Cerrar","Deseas cerrar el programa"):
@@ -103,6 +109,12 @@ class Ventana(customtkinter.CTk):
         Return
         ----------
         `None`
+
+        Example
+        ----------
+        >>> window:object|Ventana = Ventana()
+        >>> window.initialize_structure()
+        {None} -> It initializes the window structure
         """
         self.frame.pack(side = "left", fill = "y", padx = 10, pady = 10)
         self.config_button.pack(padx = 10, pady = 15)
@@ -113,7 +125,22 @@ class Ventana(customtkinter.CTk):
         
     
     def open_config(self) -> None:
-        #Aqui adjuntar una funcion que permite abrir solamente una ventana secundaria a la vez#
+        """ This method opens the configuration window to adjust the input location file and the output location file
+
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        ----------
+        >>> window:object|Ventana = Ventana()
+        >>> window.open_config()
+        {None} -> Opens the window configuration window
+        """ 
         try:
             if not (self.configuracion.ventana_abierta or self.seleccion.ventana_abierta):
                 self.configuracion.mostrar()
@@ -121,6 +148,22 @@ class Ventana(customtkinter.CTk):
             ic(error)
 
     def open_types(self) -> None:
+        """ This method opens a types list to select the desired filetypes
+
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        ----------
+        >>> window:object|Ventana = Ventana()
+        >>> window.open_types()
+        {None} -> Opens the filetypes window
+        """
         try:
 
             if not (self.configuracion.ventana_abierta or self.seleccion.ventana_abierta):
@@ -130,8 +173,23 @@ class Ventana(customtkinter.CTk):
 
 
     def confirm_command(self):
-        try:
-            
+        """This method confirms the current selected option and makes actions accordantly of the option
+        
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        -----------
+        >>> window:object|Ventana = Ventana()
+        >>> window.confirm_command()
+        {None} -> Takes the correspondent selected actions
+        """
+        try: 
             if self.option_menu.get() == self.opciones[0]:
                 print("Moviendo Archivos")
                 self.move_files()
@@ -149,6 +207,21 @@ class Ventana(customtkinter.CTk):
             messagebox.askokcancel("Error","Por favor resvisa la informacion ingresada")  
     
     def get_types(self) -> Optional[List[str]]:
+        """ This function obtains the selected types from the json file
+
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        >>> window:object|Ventana = Ventana()
+        >>> window.get_types()
+        {Optional[List]} -> Returns the selected filetypes
+        """
         try:
             with open(os.path.join(Path(__file__).parent,"filetypes.json")) as filetypes:
                 open_filetypes:json.load|dict = json.load(filetypes)
@@ -157,13 +230,49 @@ class Ventana(customtkinter.CTk):
             ic(error)
 
     def create_folders(self) -> None:
+        """ This method creates the correspondent files to organize them
+
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        >>> window:object|Ventana = Ventana()
+        >>> window.create_folders()
+        {None} -> Creates the correspondent folders
+        """
         create:object|Create_Folders = Create_Folders()
         create.folders(self.seleccion.listado_de_seleccion())
 
     def move_files(self) -> None:
-        organize:object|Organizar =  Organizar()
-        organizar_task:th.Thread = th.Thread(target= organize.move_files, args= [self.seleccion.listado_de_seleccion()])
-        organizar_task.start()
+        """This method moves the files to its correspondent destination
+
+        Parameters
+        ----------
+        `None`
+
+        Return
+        ----------
+        `None`
+
+        Example
+        ----------
+        >>> window:object|Ventana = Ventana()
+        >>> window.move_files()
+        {None} ->  Moves the files to their correspondent locations
+
+        """
+        try:
+            if self.seleccion.listado_de_seleccion():
+                organize:object|Organizar = Organizar()
+                tiempo:int  = 1000*len(self.seleccion.listado_de_seleccion())
+                self.after(tiempo, lambda: organize.move_files(self.seleccion.listado_de_seleccion()))
+        except Exception as error:
+            ic(error)
 
 
 if __name__ == "__main__":

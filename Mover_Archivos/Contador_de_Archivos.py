@@ -31,12 +31,33 @@ class Contador_de_Archivos(customtkinter.CTk):
         Return
         ----------
         `None`
+
+        Example
+        ----------
+        >>> counter:object|Contador_de_Archivos = Contador_de_Archivos()
+        >>> counter.show()
+        {None} -> Displays the window on the screen
         """
-        
+        self.deiconify()
         self.label_counter.pack(padx = 20, pady = 20)
         self.barra_de_progreso.pack(padx = 20, pady = 20)
 
     def ocultar(self) -> None:
+        """ This method withdraws the window from the screen 
+
+        Paramters
+        ---------
+        `None`
+
+        Return
+        ---------
+        `None`
+
+        Example
+        ---------
+        >>> counter:object|Contador_de_Archivos = Contador_de_Archivos()
+        >>> counter.ocultar()
+        """
         self.withdraw()
 
     def progress_bar(self,number:int,total:int) -> None:
@@ -61,5 +82,6 @@ class Contador_de_Archivos(customtkinter.CTk):
 
 if __name__ == "__main__":
     objeto:Contador_de_Archivos = Contador_de_Archivos()
+    objeto.show()
     for x in range(10):
         objeto.progress_bar(x+1,10)
